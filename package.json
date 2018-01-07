@@ -8,7 +8,8 @@
     "start": "ng serve",
     "test": "ng test",
     "lint": "tslint ./src/**/*.ts -t verbose",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+	"buildprod":"ng build --prod --base-href /demo-rest-front/"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,7 @@
     "angular-in-memory-web-api": "~0.5.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.0",
+    "tsc": "^1.20150623.0",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.4"
   },
