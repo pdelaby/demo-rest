@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AppConfig } from './app.config';
 
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -13,26 +14,34 @@ const httpOptions = {
 };
 
 @Injectable()
-export class HeroService {
+export class HeroService  {
 
-  private heroesUrl = 'api/heroes';  // URL to web api
+  private heroesUrl: string = "";  // URL to web api
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private config: AppConfig
+  ) { 
+    let host:string = this.config.getConfig("host");
+    console.log("url  + " + host);
+    this.heroesUrl = host + "hero";    
+    console.log("url pour heroes + " + this.heroesUrl);
+  }
 
+ 
   /** GET heroes from the server */
   getHeroes (): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
-        tap(heroes => this.log(`fetched heroes`)),
+        tap(heroes => this.log(`fetched heroes` + JSON.stringify(heroes))),
         catchError(this.handleError('getHeroes', []))
       );
   }
 
   /** GET hero by id. Return `undefined` when id not found */
   getHeroNo404<Data>(id: number): Observable<Hero> {
-    const url = `${this.heroesUrl}/?id=${id}`;
+    const url = `${this.heroesUrl}/${id}`;
     return this.http.get<Hero[]>(url)
       .pipe(
         map(heroes => heroes[0]), // returns a {0|1} element array

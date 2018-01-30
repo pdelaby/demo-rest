@@ -2,6 +2,9 @@ import { NgModule }       from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
+import { APP_INITIALIZER } from '@angular/core';
+import { AppConfig }       from './app.config';
+import { HttpModule }      from '@angular/http';
 
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
@@ -21,15 +24,11 @@ import { MessagesComponent }    from './messages/messages.component';
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule,
     HttpClientModule,
+    AppRoutingModule,
+    HttpModule,
 
-    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
-    // and returns simulated server responses.
-    // Remove it when a real server is ready to receive requests.
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    )
+  
   ],
   declarations: [
     AppComponent,
@@ -39,7 +38,12 @@ import { MessagesComponent }    from './messages/messages.component';
     MessagesComponent,
     HeroSearchComponent
   ],
-  providers: [ HeroService, MessageService ],
+  providers: [
+    HeroService
+    , MessageService
+    , AppConfig
+    , { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => config.load(), deps: [AppConfig], multi: true }
+   ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

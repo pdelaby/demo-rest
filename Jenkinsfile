@@ -7,6 +7,17 @@ pipeline {
     }
 	
     stages { 
+	
+		stage('Env') {
+		  steps{
+			configFileProvider([configFile(fileId:'apache-conf', variable: 'apacheConfFile')]) {
+			  script{
+				def apacheConf = readJSON(text: readFile(file: apacheConfFile))
+				env.publicApacheRoot = "$apacheConf.publichtml.root"
+			  }
+			}
+		  }
+		}
                         
         stage('Checkout'){
             steps{
@@ -28,8 +39,8 @@ pipeline {
         
         stage('Deploy'){
             steps{
-                sh "mkdir -p ${publicHtmlPath}/demo-rest-front"
-                 sh "cp -R dist/* ${publicHtmlPath}/demo-rest-front"
+                sh "mkdir -p ${publicApacheRoot}/demo-rest-front"
+                 sh "cp -R dist/* ${publicApacheRoot}/demo-rest-front"
             }
         }
         
