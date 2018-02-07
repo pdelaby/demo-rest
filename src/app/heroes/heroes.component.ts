@@ -11,6 +11,8 @@ import { HeroService } from '../hero.service';
 export class HeroesComponent implements OnInit {
   heroes: Hero[];
 
+  test:string;
+
   constructor(private heroService: HeroService) { }
 
   ngOnInit() {
@@ -23,6 +25,8 @@ export class HeroesComponent implements OnInit {
   }
 
   add(name: string): void {
+    let toto:String = null;
+    let test = toto.toString();
     name = name.trim();
     if (!name) { return; }
     this.heroService.addHero({ name } as Hero)
